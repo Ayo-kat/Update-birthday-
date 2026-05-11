@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+    <meta name="description" content="Personalized birthday greeting app with music and confetti" />
+    <title>🎂 Happy Birthday Greeting</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <!-- Login Card Section -->
+    <div class="login-card" id="login-card" role="dialog" aria-labelledby="login-title">
+        <div class="card-content">
+            <div class="cake-icon">🎂</div>
+            <h2 id="login-title">Birthday Access</h2>
+            <p class="subtitle">Enter your name to see your surprise!</p>
+            
+            <div class="input-group">
+                <input type="text" id="username" placeholder="Enter your username" aria-label="Username" autocomplete="off">
+            </div>
+            
+            <button id="login-btn" class="login-button">
+                <span>Celebrate</span>
+                <span class="button-icon">🎉</span>
+            </button>
+            
+            <p id="error-msg" class="error" aria-live="assertive"></p>
+        </div>
+    </div>
+
+    <!-- Birthday Celebration Screen -->
+    <div class="birthday-screen" id="birthday-screen" hidden>
+        <div class="birthday-container">
+            <div class="sparkle-emoji">✨</div>
+            <h1 id="birthday-heading"></h1>
+            
+            <div class="image-wrapper">
+                <img id="user-image" alt="User profile picture">
+                <div class="image-border"></div>
+            </div>
+            
+            <p id="birthday-message"></p>
+            
+            <div class="controls">
+                <button id="play-btn" class="control-btn play-btn" aria-label="Play or Pause Music">
+                    <span class="btn-icon">🎵</span>
+                    <span class="btn-text">Play Music</span>
+                </button>
+                <button id="logout-btn" class="control-btn logout-btn" aria-label="Log Out">
+                    <span class="btn-icon">↩️</span>
+                    <span class="btn-text">Log Out</span>
+                </button>
+            </div>
+        </div>
+        
+        <canvas id="confetti-canvas" aria-hidden="true"></canvas>
+        
+        <audio id="birthday-audio" loop preload="auto">
+            <source src="assets/audio/birthday-music.mp3" type="audio/mpeg">
+            Your browser does not support the audio element.
+        </audio>
+    </div>
+
+    <script src="js/script.js"></script>
+</body>
+</html>
