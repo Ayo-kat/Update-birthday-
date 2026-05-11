@@ -1,0 +1,327 @@
+/* ========== RESET & BASE ========== */
+:root {
+    --pink-light: #fff0f6;
+    --pink-soft: #ffeef8;
+    --pink-primary: #ffb6d5;
+    --pink-dark: #ff87c3;
+    --pink-deep: #ff6eb4;
+    --purple-muted: #6b6b7a;
+    --white: #ffffff;
+    --shadow-sm: 0 8px 30px rgba(255, 131, 167, 0.12);
+    --shadow-md: 0 10px 35px rgba(255, 131, 167, 0.2);
+    --shadow-lg: 0 15px 45px rgba(255, 107, 156, 0.25);
+    --radius-card: 24px;
+    --radius-button: 50px;
+    --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html, body {
+    height: 100%;
+    font-family: 'Segoe UI', 'Arial', 'Helvetica', sans-serif;
+    background: linear-gradient(135deg, var(--pink-light), var(--pink-soft));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    position: relative;
+    overflow-x: hidden;
+}
+
+/* ========== LOGIN CARD ========== */
+.login-card {
+    width: 100%;
+    max-width: 450px;
+    background: linear-gradient(135deg, var(--pink-primary), var(--pink-dark));
+    border-radius: var(--radius-card);
+    padding: 40px 32px;
+    box-shadow: var(--shadow-lg);
+    text-align: center;
+    transition: var(--transition);
+    animation: fadeInUp 0.6s ease-out;
+}
+
+.card-content {
+    position: relative;
+    z-index: 1;
+}
+
+.cake-icon {
+    font-size: 56px;
+    margin-bottom: 12px;
+    animation: bounce 2s infinite;
+}
+
+.login-card h2 {
+    font-size: 32px;
+    color: #4a1133;
+    margin-bottom: 8px;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+}
+
+.subtitle {
+    color: #6b2d4e;
+    font-size: 14px;
+    margin-bottom: 28px;
+    opacity: 0.9;
+}
+
+.input-group {
+    margin-bottom: 20px;
+}
+
+.login-card input {
+    width: 100%;
+    padding: 14px 18px;
+    border-radius: var(--radius-button);
+    border: 2px solid rgba(255, 255, 255, 0.4);
+    font-size: 16px;
+    background: rgba(255, 255, 255, 0.95);
+    transition: var(--transition);
+    font-weight: 500;
+}
+
+.login-card input:focus {
+    outline: none;
+    border-color: var(--white);
+    box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.3);
+    background: var(--white);
+}
+
+.login-button {
+    background: var(--white);
+    border: none;
+    padding: 12px 28px;
+    border-radius: var(--radius-button);
+    font-size: 18px;
+    font-weight: 700;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    transition: var(--transition);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    color: #4a1133;
+}
+
+.login-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+}
+
+.button-icon {
+    font-size: 20px;
+}
+
+.error {
+    color: #ffeb3b;
+    font-weight: 600;
+    font-size: 13px;
+    margin-top: 16px;
+    min-height: 32px;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+/* ========== BIRTHDAY SCREEN ========== */
+.birthday-screen {
+    width: 100%;
+    max-width: 550px;
+    background: var(--white);
+    border-radius: var(--radius-card);
+    padding: 32px 28px;
+    box-shadow: var(--shadow-lg);
+    text-align: center;
+    position: relative;
+    animation: scaleIn 0.5s ease-out;
+}
+
+.birthday-screen[hidden] {
+    display: none;
+}
+
+.birthday-container {
+    position: relative;
+    z-index: 2;
+}
+
+.sparkle-emoji {
+    font-size: 40px;
+    margin-bottom: 8px;
+    animation: spin 4s linear infinite;
+    display: inline-block;
+}
+
+#birthday-heading {
+    font-size: 28px;
+    background: linear-gradient(135deg, #ff6eb4, #ff3b8c);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 20px;
+    font-weight: 800;
+}
+
+.image-wrapper {
+    position: relative;
+    display: inline-block;
+    margin: 16px 0;
+}
+
+#user-image {
+    width: 220px;
+    height: 220px;
+    border-radius: 50%;
+    object-fit: cover;
+    box-shadow: var(--shadow-md);
+    position: relative;
+    z-index: 2;
+    border: 4px solid var(--white);
+}
+
+.image-border {
+    position: absolute;
+    top: -8px;
+    left: -8px;
+    right: -8px;
+    bottom: -8px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--pink-primary), var(--pink-dark));
+    z-index: 1;
+    animation: pulse 2s infinite;
+}
+
+#birthday-message {
+    font-size: 18px;
+    color: #5a3a4e;
+    margin: 24px 0;
+    line-height: 1.6;
+    font-weight: 500;
+}
+
+.controls {
+    display: flex;
+    gap: 16px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-top: 8px;
+}
+
+.control-btn {
+    padding: 12px 24px;
+    border-radius: var(--radius-button);
+    border: none;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    transition: var(--transition);
+    background: linear-gradient(135deg, #ffd6ea, #ffd1f0);
+    color: #4a1133;
+}
+
+.control-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-sm);
+}
+
+.play-btn:active, .logout-btn:active {
+    transform: translateY(0);
+}
+
+/* ========== ANIMATIONS ========== */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes scaleIn {
+    from {
+        opacity: 0;
+        transform: scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    10%, 30%, 50%, 70% { transform: translateX(-6px); }
+    20%, 40%, 60% { transform: translateX(6px); }
+}
+
+@keyframes bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 0.6; transform: scale(1); }
+    50% { opacity: 1; transform: scale(1.05); }
+}
+
+@keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+.shake {
+    animation: shake 0.42s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+}
+
+/* ========== CONFETTI CANVAS ========== */
+#confetti-canvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 999;
+}
+
+/* ========== RESPONSIVE ========== */
+@media (max-width: 550px) {
+    .login-card, .birthday-screen {
+        padding: 28px 20px;
+    }
+    
+    #user-image {
+        width: 170px;
+        height: 170px;
+    }
+    
+    #birthday-heading {
+        font-size: 22px;
+    }
+    
+    .control-btn {
+        padding: 10px 18px;
+        font-size: 14px;
+    }
+}
+
+@media (min-width: 701px) {
+    .login-card {
+        padding: 48px 40px;
+    }
+    
+    .birthday-screen {
+        padding: 40px 36px;
+    }
+}
