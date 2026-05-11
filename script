@@ -1,0 +1,272 @@
+// ========== USER CONFIGURATION ==========
+// Add your usernames here (case-insensitive)
+const VALID_USERS = ["maddy", "sam", "leo"];
+
+// Map each username to their profile image path
+const USER_IMAGES = {
+    maddy: "assets/images/maddy.jpg",
+    sam: "assets/images/sam.jpg",
+    leo: "assets/images/leo.jpg"
+};
+
+// Birthday message template (can be customized)
+const getBirthdayMessage = (name) => {
+    return `🎈 Wishing you a day full of love, cake, and joy, ${name}! May all your birthday wishes come true! 🎈`;
+};
+
+// ========== DOM ELEMENTS ==========
+const loginCard = document.getElementById("login-card");
+const birthdayScreen = document.getElementById("birthday-screen");
+const usernameInput = document.getElementById("username");
+const loginBtn = document.getElementById("login-btn");
+const errorMsg = document.getElementById("error-msg");
+const heading = document.getElementById("birthday-heading");
+const message = document.getElementById("birthday-message");
+const userImage = document.getElementById("user-image");
+const playBtn = document.getElementById("play-btn");
+const logoutBtn = document.getElementById("logout-btn");
+const audio = document.getElementById("birthday-audio");
+const confettiCanvas = document.getElementById("confetti-canvas");
+
+// ========== STATE VARIABLES ==========
+let currentUsername = "";
+let confettiAnimationId = null;
+let isPlaying = false;
+
+// ========== HELPER FUNCTIONS ==========
+function capitalizeFirstLetter(string) {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+}
+
+function showError(message) {
+    errorMsg.textContent = message;
+    loginCard.classList.add("shake");
+    setTimeout(() => loginCard.classList.remove("shake"), 420);
+}
+
+function clearError() {
+    errorMsg.textContent = "";
+}
+
+// ========== CONFETTI EFFECT ==========
+function triggerConfettiOnce() {
+    // Stop any existing confetti animation
+    if (confettiAnimationId) {
+        cancelAnimationFrame(confettiAnimationId);
+    }
+    
+    const canvas = confettiCanvas;
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+    
+    // Set canvas dimensions
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+    
+    // Create confetti pieces
+    const pieces = [];
+    const PIECE_COUNT = 150;
+    
+    for (let i = 0; i < PIECE_COUNT; i++) {
+        pieces.push({
+            x: Math.random() * canvas.width,
+            y: Math.random() * canvas.height - canvas.height,
+            width: 5 + Math.random() * 8,
+            height: 5 + Math.random() * 8,
+            color: `hsl(${Math.random() * 360}, 80%, 65%)`,
+            velocity: 2 + Math.random() * 4,
+            rotation: Math.random() * Math.PI * 2,
+            rotationSpeed: 0.02 + Math.random() * 0.05
+        });
+    }
+    
+    let frame = 0;
+    const MAX_FRAMES = 240; // ~4 seconds at 60fps
+    
+    function draw() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        
+        for (const p of pieces) {
+            ctx.save();
+            ctx.translate(p.x + p.width / 2, p.y + p.height / 2);
+            ctx.rotate(p.rotation);
+            ctx.fillStyle = p.color;
+            ctx.fillRect(-p.width / 2, -p.height / 2, p.width, p.height);
+            ctx.restore();
+            
+            // Update position
+            p.y += p.velocity;
+            p.rotation += p.rotationSpeed;
+            
+            // Reset pieces that fall off the bottom
+            if (p.y > canvas.height) {
+                p.y = -p.height;
+                p.x = Math.random() * canvas.width;
+            }
+        }
+        
+        frame++;
+        if (frame < MAX_FRAMES) {
+            confettiAnimationId = requestAnimationFrame(draw);
+        } else {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            confettiAnimationId = null;
+        }
+    }
+    
+    draw();
+}
+
+// Handle window resize for confetti canvas
+function handleResize() {
+    if (confettiCanvas) {
+        confettiCanvas.width = window.innerWidth;
+        confettiCanvas.height = window.innerHeight;
+    }
+}
+
+// ========== AUDIO CONTROLS ==========
+function updatePlayButtonText() {
+    if (playBtn) {
+        const icon = playBtn.querySelector('.btn-icon');
+        const text = playBtn.querySelector('.btn-text');
+        if (isPlaying) {
+            if (icon) icon.textContent = '⏸️';
+            if (text) text.textContent = 'Pause Music';
+        } else {
+            if (icon) icon.textContent = '🎵';
+            if (text) text.textContent = 'Play Music';
+        }
+    }
+}
+
+function toggleAudio() {
+    if (!audio) return;
+    
+    if (audio.paused) {
+        audio.play()
+            .then(() => {
+                isPlaying = true;
+                updatePlayButtonText();
+            })
+            .catch((error) => {
+                console.log("Audio playback error:", error);
+                alert("Unable to play music. Please click the button again to play.");
+            });
+    } else {
+        audio.pause();
+        isPlaying = false;
+        updatePlayButtonText();
+    }
+}
+
+// ========== BIRTHDAY SCREEN DISPLAY ==========
+function showBirthday(username) {
+    currentUsername = username;
+    const displayName = capitalizeFirstLetter(username);
+    
+    // Update content
+    heading.textContent = `🎉 Happy Birthday, ${displayName}! 🎂`;
+    message.textContent = getBirthdayMessage(displayName);
+    
+    // Set user image with fallback
+    const imagePath = USER_IMAGES[username] || "assets/images/placeholder.jpg";
+    userImage.src = imagePath;
+    
+    // Handle image loading errors
+    userImage.onerror = () => {
+        userImage.src = "assets/images/placeholder.jpg";
+    };
+    
+    // Switch screens
+    loginCard.hidden = true;
+    birthdayScreen.hidden = false;
+    
+    // Reset audio state
+    if (audio) {
+        audio.currentTime = 0;
+        isPlaying = false;
+        updatePlayButtonText();
+    }
+    
+    // Trigger celebration effects
+    triggerConfettiOnce();
+    
+    // Auto-play music (requires user interaction first - browsers restrict this)
+    // We'll let the user click play manually
+}
+
+// ========== LOGOUT FUNCTION ==========
+function logout() {
+    // Stop and reset audio
+    if (audio) {
+        audio.pause();
+        audio.currentTime = 0;
+        isPlaying = false;
+        updatePlayButtonText();
+    }
+    
+    // Clear confetti if running
+    if (confettiAnimationId) {
+        cancelAnimationFrame(confettiAnimationId);
+        const ctx = confettiCanvas.getContext('2d');
+        if (ctx) ctx.clearRect(0, 0, confettiCanvas.width, confettiCanvas.height);
+        confettiAnimationId = null;
+    }
+    
+    // Switch screens
+    birthdayScreen.hidden = true;
+    loginCard.hidden = false;
+    
+    // Clear inputs and errors
+    usernameInput.value = "";
+    clearError();
+    
+    // Reset user image
+    userImage.src = "";
+}
+
+// ========== LOGIN HANDLER ==========
+function handleLogin() {
+    const username = usernameInput.value.trim().toLowerCase();
+    clearError();
+    
+    if (!username) {
+        showError("Please enter a username!");
+        return;
+    }
+    
+    if (VALID_USERS.includes(username)) {
+        showBirthday(username);
+    } else {
+        showError(`"${username}" not found. Please try a valid username.`);
+    }
+}
+
+// ========== EVENT LISTENERS ==========
+loginBtn.addEventListener("click", handleLogin);
+
+logoutBtn.addEventListener("click", logout);
+
+playBtn.addEventListener("click", toggleAudio);
+
+usernameInput.addEventListener("keydown", (e) => {
+    if (e.key === 'Enter') {
+        e.preventDefault();
+        handleLogin();
+    }
+});
+
+// Handle window resize for canvas
+window.addEventListener("resize", handleResize);
+
+// Preload audio metadata when page loads
+window.addEventListener("load", () => {
+    if (audio) {
+        audio.load();
+    }
+    handleResize();
+});
+
+// ========== ADDITIONAL FEATURE: Focus username on page load ==========
+usernameInput.focus(); 
